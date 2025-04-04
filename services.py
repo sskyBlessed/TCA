@@ -81,3 +81,40 @@ class TelegramService:
         last_name = name_parts[1] if len(name_parts) > 1 else ""
 
         return identifier, first_name, last_name
+    
+
+class StorageService:
+    """Сервис для работы с файлами (загрузка и сохранение результатов)."""
+
+    @staticmethod
+    def load_contacts(file_path: str) -> list:
+        """
+        Загружает контакты из файла.
+
+        :param file_path: Путь к файлу.
+        :return: Список строк с контактами.
+        """
+        contacts = []
+        try:
+            with open(file_path, 'r', encoding='utf-8') as file:
+                contacts = [line.strip() for line in file if line.strip()]
+        except Exception as e:
+            logging.error(f"Ошибка загрузки файла: {e}")
+        return contacts
+
+    @staticmethod
+    def save_results(file_path: str, summary: tuple, details: list):
+        """
+        Сохраняет результаты добавления контактов.
+
+        :param file_path: Путь к файлу.
+        :param summary: Итоги (добавлено, уже добавлено, не найдено).
+        :param details: Подробный список (контакт, статус).
+        """
+        try:
+            with open(file_path, 'w', encoding='utf-8') as file:
+                file.write(f"Итог: Добавлено - {summary[0]}, Уже было - {summary[1]}, Не найдено - {summary[2]}\n\n")
+                for contact, status in details:
+                    file.write(f"{contact} - {status}\n")
+        except Exception as e:
+            logging.error(f"Ошибка сохранения файла: {e}")
