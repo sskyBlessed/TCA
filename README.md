@@ -18,8 +18,8 @@
 
 ```sh
 # 🛎️ Клонируем репозиторий
-git clone https://github.com/yourusername/telegram-contact-adder.git
-cd telegram-contact-adder
+git clone https://github.com/sskyBlessed/TCA.git
+cd TCA
 
 # 📦 Устанавливаем зависимости
 pip install -r requirements.txt
