@@ -2,14 +2,7 @@ import customtkinter as ctk
 import tkinter.filedialog as fd
 import asyncio
 from services import TelegramService, StorageService
-import os
-from dotenv import load_dotenv
-
-# Загрузка переменных окружения
-load_dotenv()
-API_ID = os.getenv("API_ID")
-API_HASH = os.getenv("API_HASH")
-SESSION_NAME = os.getenv("SESSION_NAME")
+from config import API_ID, API_HASH, SESSION_NAME
 
 
 class TelegramContactAdderApp:
