@@ -42,7 +42,7 @@ SESSION_NAME=session
 2. 🔄 Запустите программу:
 
 ```sh
-python main.py
+python app.py
 ```
 
 ## 🎯 Использование
