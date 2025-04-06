@@ -3,7 +3,7 @@ import tkinter.filedialog as fd
 import asyncio
 from services import TelegramService, StorageService
 from config import API_ID, API_HASH, SESSION_NAME
-
+import threading
 
 class TelegramContactAdderApp:
     """Графический интерфейс для добавления контактов в Telegram."""
@@ -38,6 +38,9 @@ class TelegramContactAdderApp:
 
         self.save_button = ctk.CTkButton(root, text="Сохранить результаты", command=self.save_results, state='disabled')
         self.save_button.pack(pady=5)
+        
+        self.loop = asyncio.new_event_loop()
+        threading.Thread(target=self.loop.run_forever, daemon=True).start()
 
         self.results = None
 
@@ -54,7 +57,7 @@ class TelegramContactAdderApp:
             return
 
         contacts = StorageService.load_contacts(file_path)
-        asyncio.run(self.process_contacts(contacts))
+        asyncio.run_coroutine_threadsafe(self.process_contacts(contacts), self.loop)
 
     async def process_contacts(self, contacts):
         """Асинхронный процесс добавления контактов в Telegram."""
