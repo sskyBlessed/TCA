@@ -46,19 +46,25 @@ class TelegramService:
                     results.append((identifier, "уже добавлен"))
                     continue
             except Exception:
-                pass  # Игнорируем ошибки, если контакт не найден
+                user = False  # Игнорируем ошибки, если контакт не найден
 
             # Добавление контакта в Telegram
             if identifier.startswith('@') or identifier[0].isalpha():
-                result = await self.client(functions.contacts.AddContactRequest(
-                    id=identifier, first_name=user.first_name, last_name=last_name, phone='', add_phone_privacy_exception=True
-                ))
-                if result.users:
-                    added += 1
-                    results.append((identifier, "добавлен"))
-                else:
+                if user == False:
                     not_found += 1
                     results.append((identifier, "не найден"))
+                else:
+                    user = await self.client.get_entity(identifier)  # Получаем данные пользователя
+                    logging.info(f"{user}")
+                    result = await self.client(functions.contacts.AddContactRequest(
+                        id=identifier, first_name=user.first_name, last_name=last_name, phone='', add_phone_privacy_exception=True
+                    ))
+                    if result.users:
+                        added += 1
+                        results.append((identifier, "добавлен"))
+                    else:
+                        not_found += 1
+                        results.append((identifier, "не найден"))
             else:
                 contact = InputPhoneContact(
                     client_id=0, phone=identifier, first_name=first_name, last_name=last_name
